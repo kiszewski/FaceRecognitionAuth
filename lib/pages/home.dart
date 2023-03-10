@@ -3,9 +3,10 @@ import 'package:face_net_authentication/locator.dart';
 import 'package:face_net_authentication/pages/db/databse_helper.dart';
 import 'package:face_net_authentication/pages/sign-in.dart';
 import 'package:face_net_authentication/pages/sign-up.dart';
+import 'package:face_net_authentication/pages/sign_up_from_gallery.dart';
 import 'package:face_net_authentication/services/camera.service.dart';
-import 'package:face_net_authentication/services/ml_service.dart';
 import 'package:face_net_authentication/services/face_detector_service.dart';
+import 'package:face_net_authentication/services/ml_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -181,6 +182,48 @@ class _MyHomePageState extends State<MyHomePage> {
                                 children: [
                                   Text(
                                     'SIGN UP',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Icon(Icons.person_add, color: Colors.white)
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      SignUpFromGallery(),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Color(0xFF0F0BDB),
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                    color: Colors.blue.withOpacity(0.1),
+                                    blurRadius: 1,
+                                    offset: Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 14, horizontal: 16),
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'SIGN UP FROM GALLERY',
                                     style: TextStyle(color: Colors.white),
                                   ),
                                   SizedBox(

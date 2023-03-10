@@ -1,9 +1,9 @@
+import 'package:camera/camera.dart';
 import 'package:face_net_authentication/locator.dart';
 import 'package:face_net_authentication/services/camera.service.dart';
-import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
-import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:google_ml_kit/google_ml_kit.dart';
 
 class FaceDetectorService {
   CameraService _cameraService = locator<CameraService>();
@@ -66,6 +66,11 @@ class FaceDetectorService {
     );
     // for mlkit 13
 
+    _faces = await _faceDetector.processImage(_firebaseVisionImage);
+  }
+
+  Future<void> detectFacesFromImageFile(String file) async {
+    InputImage _firebaseVisionImage = InputImage.fromFilePath(file);
     _faces = await _faceDetector.processImage(_firebaseVisionImage);
   }
 

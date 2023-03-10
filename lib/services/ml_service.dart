@@ -47,7 +47,7 @@ class MLService {
     }
   }
 
-  void setCurrentPrediction(CameraImage cameraImage, Face? face) {
+  void setCurrentPrediction(dynamic cameraImage, Face? face) {
     if (_interpreter == null) throw Exception('Interpreter is null');
     if (face == null) throw Exception('Face is null');
     List input = _preProcess(cameraImage, face);
@@ -65,7 +65,7 @@ class MLService {
     return _searchResult(this._predictedData);
   }
 
-  List _preProcess(CameraImage image, Face faceDetected) {
+  List _preProcess(dynamic image, Face faceDetected) {
     imglib.Image croppedImage = _cropFace(image, faceDetected);
     imglib.Image img = imglib.copyResizeCropSquare(croppedImage, 112);
 
@@ -73,20 +73,35 @@ class MLService {
     return imageAsList;
   }
 
-  imglib.Image _cropFace(CameraImage image, Face faceDetected) {
-    imglib.Image convertedImage = _convertCameraImage(image);
+  imglib.Image _cropFace(dynamic image, Face faceDetected) {
+    late final imglib.Image convertedImage;
+    if (image is File) {
+      convertedImage = _convertFile(image);
+    } else {
+      convertedImage = _convertCameraImage(image);
+    }
+
     double x = faceDetected.boundingBox.left - 10.0;
     double y = faceDetected.boundingBox.top - 10.0;
     double w = faceDetected.boundingBox.width + 10.0;
     double h = faceDetected.boundingBox.height + 10.0;
     return imglib.copyCrop(
-        convertedImage, x.round(), y.round(), w.round(), h.round());
+      convertedImage,
+      x.round(),
+      y.round(),
+      w.round(),
+      h.round(),
+    );
   }
 
   imglib.Image _convertCameraImage(CameraImage image) {
     var img = convertToImage(image);
     var img1 = imglib.copyRotate(img, -90);
     return img1;
+  }
+
+  imglib.Image _convertFile(File file) {
+    return convertFromFile(file);
   }
 
   Float32List imageToByteListFloat32(imglib.Image image) {
