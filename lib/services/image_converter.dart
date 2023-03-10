@@ -1,5 +1,7 @@
-import 'package:image/image.dart' as imglib;
+import 'dart:io';
+
 import 'package:camera/camera.dart';
+import 'package:image/image.dart' as imglib;
 
 imglib.Image convertToImage(CameraImage image) {
   try {
@@ -10,6 +12,19 @@ imglib.Image convertToImage(CameraImage image) {
       return _convertBGRA8888(image);
     }
     throw Exception('Image format not supported');
+  } catch (e) {
+    print("ERROR:" + e.toString());
+  }
+  throw Exception('Image format not supported');
+}
+
+imglib.Image convertFromFile(File file) {
+  try {
+    return imglib.Image.fromBytes(
+      200,
+      300,
+      file.readAsBytesSync(),
+    );
   } catch (e) {
     print("ERROR:" + e.toString());
   }
