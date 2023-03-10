@@ -1,17 +1,18 @@
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
+
 import 'package:camera/camera.dart';
 import 'package:face_net_authentication/pages/db/databse_helper.dart';
 import 'package:face_net_authentication/pages/models/user.model.dart';
 import 'package:face_net_authentication/services/image_converter.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
-import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:image/image.dart' as imglib;
+import 'package:tflite_flutter/tflite_flutter.dart';
 
 class MLService {
   Interpreter? _interpreter;
-  double threshold = 0.5;
+  double threshold = 1.0;
 
   List _predictedData = [];
   List get predictedData => _predictedData;
