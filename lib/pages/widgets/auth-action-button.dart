@@ -1,13 +1,13 @@
 import 'package:face_net_authentication/locator.dart';
 import 'package:face_net_authentication/pages/db/databse_helper.dart';
+import 'package:face_net_authentication/pages/home.dart';
 import 'package:face_net_authentication/pages/models/user.model.dart';
 import 'package:face_net_authentication/pages/profile.dart';
 import 'package:face_net_authentication/pages/widgets/app_button.dart';
 import 'package:face_net_authentication/services/camera.service.dart';
 import 'package:face_net_authentication/services/ml_service.dart';
 import 'package:flutter/material.dart';
-import 'package:image/image.dart';
-import '../home.dart';
+
 import 'app_text_field.dart';
 
 class AuthActionButton extends StatefulWidget {
@@ -33,22 +33,6 @@ class _AuthActionButtonState extends State<AuthActionButton> {
       TextEditingController(text: '');
 
   User? predictedUser;
-
-  Future _signUp(context) async {
-    DatabaseHelper _databaseHelper = DatabaseHelper.instance;
-    List predictedData = _mlService.predictedData;
-    String user = _userTextEditingController.text;
-    String password = _passwordTextEditingController.text;
-    User userToSave = User(
-      user: user,
-      password: password,
-      modelData: predictedData,
-    );
-    await _databaseHelper.insert(userToSave);
-    this._mlService.setPredictedData([]);
-    Navigator.push(context,
-        MaterialPageRoute(builder: (BuildContext context) => MyHomePage()));
-  }
 
   Future _signIn(context) async {
     String password = _passwordTextEditingController.text;
@@ -190,7 +174,11 @@ class _AuthActionButtonState extends State<AuthActionButton> {
                         ? AppButton(
                             text: 'SIGN UP',
                             onPressed: () async {
-                              await _signUp(context);
+                              await signUp(
+                                context,
+                                _mlService,
+                                _userTextEditingController.text,
+                              );
                             },
                             icon: Icon(
                               Icons.person_add,
@@ -210,4 +198,24 @@ class _AuthActionButtonState extends State<AuthActionButton> {
   void dispose() {
     super.dispose();
   }
+}
+
+Future signUp(
+  BuildContext context,
+  MLService mlService,
+  String username,
+) async {
+  DatabaseHelper _databaseHelper = DatabaseHelper.instance;
+  List predictedData = mlService.predictedData;
+  User userToSave = User(
+    user: username,
+    password: '',
+    modelData: predictedData,
+  );
+  await _databaseHelper.insert(userToSave);
+  mlService.setPredictedData([]);
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (BuildContext context) => MyHomePage()),
+  );
 }
